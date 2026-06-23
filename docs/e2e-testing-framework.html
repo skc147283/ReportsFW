@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReportsFW E2E Testing Framework</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 2rem;
+        font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: #f7f9fc;
+        color: #11243f;
+      }
+      .container { max-width: 1080px; margin: 0 auto; }
+      .card {
+        background: #fff;
+        border: 1px solid #dbe5f1;
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        margin-bottom: 1rem;
+      }
+      code {
+        color: #0d5a90;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #e6edf7; }
+      th { color: #1f4e89; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ReportsFW End-to-End Testing Framework</h1>
+      <p>
+        This document defines the E2E automation framework introduced for ReportsFW. It is designed for
+        maintainable business-flow testing with reusable page objects and deterministic test data.
+      </p>
+
+      <section class="card">
+        <h2>1. Stack and Runner</h2>
+        <ul>
+          <li><code>pytest</code> as test runner and fixture orchestrator</li>
+          <li><code>selenium</code> for browser automation</li>
+          <li><code>webdriver-manager</code> for ChromeDriver lifecycle</li>
+          <li>Headless Chrome default, configurable through environment variables</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>2. Framework Layout</h2>
+        <ul>
+          <li><code>tests/e2e/conftest.py</code>: browser + wait fixtures</li>
+          <li><code>tests/e2e/pages/base_page.py</code>: common interaction helpers</li>
+          <li><code>tests/e2e/pages/*_page.py</code>: feature-specific page objects</li>
+          <li><code>tests/e2e/tests/test_dashboard_smoke.py</code>: smoke validation</li>
+          <li><code>tests/e2e/tests/test_business_flows.py</code>: full lifecycle scenario</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>3. Test Controls</h2>
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Default</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>E2E_BASE_URL</code></td><td><code>http://localhost:3000</code></td><td>Application host under test</td></tr>
+            <tr><td><code>E2E_TIMEOUT_SECONDS</code></td><td><code>15</code></td><td>Explicit wait timeout</td></tr>
+            <tr><td><code>E2E_HEADLESS</code></td><td><code>true</code></td><td>Headless/non-headless browser mode</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>4. Execution Guide</h2>
+        <ol>
+          <li>Start the app: <code>npm run dev</code></li>
+          <li>Install E2E dependencies: <code>python -m pip install -r tests/e2e/requirements-e2e.txt</code></li>
+          <li>Run all E2E tests: <code>python -m pytest</code></li>
+          <li>Run a specific test file: <code>python -m pytest tests/e2e/tests/test_business_flows.py</code></li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>5. Design Principles</h2>
+        <ul>
+          <li>Page Object pattern for reduced selector duplication</li>
+          <li>Business-level assertions (text and flow outcomes) over brittle implementation checks</li>
+          <li>Timestamp-based unique test data to avoid collisions</li>
+          <li>Single browser session per run for speed, explicit waits for stability</li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

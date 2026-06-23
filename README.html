@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReportsFW Project README</title>
+    <style>
+      :root {
+        --bg-1: #f8fbff;
+        --bg-2: #eef4ff;
+        --panel: #ffffff;
+        --text: #182033;
+        --muted: #5f6b85;
+        --line: #d5def0;
+        --brand: #0a6c7a;
+        --brand-2: #2463d6;
+        --good: #0f8b5f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 460px at -12% -10%, #d7f1ff 0%, transparent 62%),
+          radial-gradient(900px 500px at 110% -15%, #dce8ff 0%, transparent 57%),
+          linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      }
+      .wrap {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 2.2rem 1.2rem 3rem;
+      }
+      .hero {
+        background: linear-gradient(128deg, #0c3b53, #1f306e 55%, #2e5ca8);
+        color: #f5fbff;
+        border-radius: 18px;
+        padding: 1.7rem 1.4rem;
+        border: 1px solid #2c4f88;
+        box-shadow: 0 16px 38px rgba(20, 43, 89, 0.24);
+      }
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: 0.01em;
+      }
+      .subtitle {
+        margin-top: 0.6rem;
+        margin-bottom: 0;
+        color: #dce9ff;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1rem 1.1rem;
+        box-shadow: 0 4px 14px rgba(50, 75, 125, 0.08);
+      }
+      .card h2 {
+        margin-top: 0;
+        margin-bottom: 0.65rem;
+        font-size: 1.2rem;
+        color: #142b57;
+      }
+      .card h3 {
+        margin-top: 1rem;
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+        color: var(--brand-2);
+      }
+      p,
+      li,
+      td,
+      th {
+        line-height: 1.55;
+      }
+      ul {
+        margin-top: 0.4rem;
+        margin-bottom: 0;
+        padding-left: 1.15rem;
+      }
+      code {
+        font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+        color: #0f577e;
+        background: #edf7ff;
+        border: 1px solid #d6ecff;
+        border-radius: 8px;
+        padding: 0.08rem 0.35rem;
+      }
+      .mono-block {
+        margin-top: 0.6rem;
+        margin-bottom: 0;
+        padding: 0.85rem;
+        white-space: pre-wrap;
+        border-radius: 12px;
+        border: 1px solid #d7e2f7;
+        background: #f8fbff;
+        font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+        font-size: 0.9rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.58rem;
+        border-bottom: 1px solid #e2e9f7;
+        vertical-align: top;
+      }
+      th {
+        color: #194083;
+      }
+      .chips {
+        margin-top: 0.7rem;
+      }
+      .chip {
+        display: inline-block;
+        margin-right: 0.42rem;
+        margin-bottom: 0.45rem;
+        border-radius: 999px;
+        border: 1px solid #b9cdef;
+        color: #244779;
+        background: #f1f7ff;
+        padding: 0.24rem 0.58rem;
+        font-size: 0.83rem;
+      }
+      .good {
+        color: var(--good);
+        font-weight: 600;
+      }
+      .links a {
+        color: #174ca8;
+        text-decoration: none;
+      }
+      .links a:hover {
+        text-decoration: underline;
+      }
+      @media (max-width: 900px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 1.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <h1>ReportsFW Project README</h1>
+        <p class="subtitle">
+          Consolidated project guide covering architecture, end-to-end testing framework, and business use cases.
+        </p>
+      </section>
+
+      <div class="row">
+        <section class="card">
+          <h2>Project Snapshot</h2>
+          <ul>
+            <li>Next.js 16 and TypeScript dashboard for stock-plan reporting.</li>
+            <li>API routes in <code>src/app/api/*</code> power dashboard and CRUD workflows.</li>
+            <li>Primary data source is PostgreSQL with Oracle and demo fallback options.</li>
+            <li>E2E automation uses pytest and Selenium page objects.</li>
+          </ul>
+          <div class="chips">
+            <span class="chip">Next.js 16</span>
+            <span class="chip">TypeScript</span>
+            <span class="chip">PostgreSQL</span>
+            <span class="chip">Oracle (optional)</span>
+            <span class="chip">pytest + Selenium</span>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Architecture</h2>
+          <p>
+            The runtime follows a layered model where App Router pages call API routes, and API routes delegate all
+            persistence operations to a single data-access layer.
+          </p>
+          <pre class="mono-block">Browser UI
+-> App Router pages (dashboard + managers)
+-> API routes (/api/dashboard, /api/companies, /api/employees, /api/stock-plans)
+-> Data access module (src/lib/oracle.ts)
+-> PostgreSQL (preferred) / Oracle (secondary) / in-memory demo fallback</pre>
+          <h3>Core Responsibilities</h3>
+          <ul>
+            <li><code>src/app/*</code> and <code>src/components/*</code>: UI rendering and user interactions.</li>
+            <li><code>src/app/api/*/route.ts</code>: request validation and API orchestration.</li>
+            <li><code>src/lib/oracle.ts</code>: DB connection, reads/writes, schema seed, fallback behavior.</li>
+            <li><code>db/schema.sql</code>: relational model definition and seed examples.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="row">
+        <section class="card">
+          <h2>Testing Framework</h2>
+          <p>
+            The E2E suite validates user-critical flows through browser automation with reusable page objects and stable
+            explicit waits.
+          </p>
+          <h3>Structure</h3>
+          <ul>
+            <li><code>tests/e2e/conftest.py</code>: browser and wait fixtures.</li>
+            <li><code>tests/e2e/pages/*.py</code>: page object classes.</li>
+            <li><code>tests/e2e/tests/test_dashboard_smoke.py</code>: smoke coverage.</li>
+            <li><code>tests/e2e/tests/test_business_flows.py</code>: full create-and-verify flow.</li>
+          </ul>
+          <h3>Run Commands</h3>
+          <ul>
+            <li><code>python3 -m pip install -r tests/e2e/requirements-e2e.txt</code></li>
+            <li><code>python3 -m pytest</code></li>
+          </ul>
+          <p class="good">Configurable with E2E_BASE_URL, E2E_HEADLESS, and E2E_TIMEOUT_SECONDS.</p>
+        </section>
+
+        <section class="card">
+          <h2>Business Use Cases</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Use Case</th>
+                <th>Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>UC-01</td>
+                <td>Review Portfolio Dashboard</td>
+                <td>Stakeholders see portfolio/risk summaries and current state.</td>
+              </tr>
+              <tr>
+                <td>UC-02</td>
+                <td>Create Company Profile</td>
+                <td>New issuer entity becomes available in the platform.</td>
+              </tr>
+              <tr>
+                <td>UC-03</td>
+                <td>Register Employee</td>
+                <td>Employee is linked to company and compensation context.</td>
+              </tr>
+              <tr>
+                <td>UC-04</td>
+                <td>Create Stock Plan</td>
+                <td>Plan definitions are persisted for reporting and operations.</td>
+              </tr>
+              <tr>
+                <td>UC-05</td>
+                <td>Traceability Verification</td>
+                <td>Created entities propagate back to dashboard views.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Automated Coverage Mapping</h3>
+          <ul>
+            <li><code>test_dashboard_renders_key_sections</code> covers UC-01.</li>
+            <li><code>test_end_to_end_business_flow</code> covers UC-02 through UC-05.</li>
+          </ul>
+        </section>
+      </div>
+
+      <section class="card links">
+        <h2>Detailed Documents</h2>
+        <ul>
+          <li><a href="docs/architecture.html">docs/architecture.html</a></li>
+          <li><a href="docs/e2e-testing-framework.html">docs/e2e-testing-framework.html</a></li>
+          <li><a href="docs/business-use-cases.html">docs/business-use-cases.html</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

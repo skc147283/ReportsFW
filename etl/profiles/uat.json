@@ -1,0 +1,8 @@
+{
+  "name": "UAT",
+  "source_url": "http://localhost:3000/api/dashboard",
+  "target_db_path": "db/reportsfw_etl_uat.sqlite",
+  "export_dir": "tests/reconciliation/data/uat",
+  "expected_source": "oracle",
+  "enforce_source_guard": true
+}

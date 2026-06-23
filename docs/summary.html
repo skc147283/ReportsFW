@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReportsFW Summary</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .card {
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+        background: #111827;
+      }
+      h1, h2 {
+        margin: 0 0 10px 0;
+      }
+      h1 { font-size: 24px; }
+      h2 { font-size: 18px; }
+      p, li {
+        margin: 4px 0;
+        line-height: 1.35;
+      }
+      code { color: #86efac; }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>ReportsFW: Architecture and Testing Summary</h1>
+
+      <section class="card">
+        <h2>Architecture</h2>
+        <ul>
+          <li>Frontend: Next.js 16 + React + TypeScript + Tailwind.</li>
+          <li>API: App Router endpoints at <code>/api/dashboard</code>, <code>/api/companies</code>, <code>/api/employees</code>, <code>/api/stock-plans</code>.</li>
+          <li>Data layer: <code>src/lib/oracle.ts</code> with source priority Postgres -> Oracle -> in-memory demo fallback.</li>
+          <li>Persistence: Oracle local Docker now active for runtime testing.</li>
+          <li>UI flows: Quick-create on Dashboard, Companies, and Employees pages.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Database Work</h2>
+        <ul>
+          <li>Oracle containerized via <code>docker-compose.oracle.yml</code>.</li>
+          <li>Base seed script: <code>db/oracle-seed.sql</code>.</li>
+          <li>Reconciliation expansion script: <code>db/reconciliation-load.sql</code> (idempotent MERGE statements).</li>
+          <li>Current Oracle totals: 6 companies, 13 employees, 6 stock plans, 10 financial reports.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Testing Work</h2>
+        <ul>
+          <li>E2E: pytest + Selenium Page Object framework under <code>tests/e2e</code>.</li>
+          <li>Smoke and business-flow tests implemented and runnable with pytest.</li>
+          <li>New reconciliation framework under <code>tests/reconciliation</code>:</li>
+          <li>Compares source vs target extracts for row-count, missing keys, and metric mismatches.</li>
+          <li>Supports CSV and JSON inputs plus CLI runner.</li>
+          <li>Validation tests: <code>tests/test_reconciliation_framework.py</code> (passing).</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Outcome</h2>
+        <p>The project now supports UI creation flows, Oracle-backed persistence, browser E2E automation, and ETL-style reconciliation testing for INT/UAT source-target comparisons.</p>
+      </section>
+    </main>
+  </body>
+</html>

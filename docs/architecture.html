@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReportsFW Architecture</title>
+    <style>
+      :root {
+        --bg: #0b1320;
+        --panel: #101b2d;
+        --text: #e9f2ff;
+        --muted: #a7bbd7;
+        --accent: #58d5a9;
+        --accent2: #74a9ff;
+        --border: #223754;
+      }
+      body {
+        margin: 0;
+        padding: 2rem;
+        font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at top right, #16304f, #0b1320 42%);
+      }
+      .container {
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+      }
+      .card {
+        background: color-mix(in srgb, var(--panel) 92%, black);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+      }
+      code {
+        color: var(--accent);
+        font-size: 0.95em;
+      }
+      ul {
+        line-height: 1.6;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        text-align: left;
+        padding: 0.7rem;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        color: var(--accent2);
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        border-radius: 999px;
+        background: #1c3150;
+        border: 1px solid #2a466d;
+        color: #b9cdf0;
+        font-size: 0.8rem;
+      }
+      .diagram {
+        white-space: pre-wrap;
+        line-height: 1.35;
+        color: #c8d8f0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ReportsFW Architecture Document</h1>
+      <p>
+        This document describes the architecture of the ReportsFW financial stock-plan dashboard application,
+        including runtime layers, data flow, persistence strategy, and deployment considerations.
+      </p>
+
+      <section class="card">
+        <h2>1. System Overview</h2>
+        <p>
+          ReportsFW is a Next.js 16 application with React client components and Node.js API routes.
+          It supports three data sources with automatic fallback:
+          <span class="badge">PostgreSQL (preferred)</span>
+          <span class="badge">Oracle (secondary)</span>
+          <span class="badge">In-memory demo state (resiliency fallback)</span>
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>2. Logical Architecture</h2>
+        <div class="diagram">
+Browser (User)
+  -> Next.js App Router Pages (Dashboard + CRUD screens)
+     -> API Routes (/api/dashboard, /api/companies, /api/employees, /api/stock-plans)
+        -> Data Access Layer (src/lib/oracle.ts)
+           -> PostgreSQL via pg (if configured and reachable)
+           -> Oracle via oracledb (if configured and reachable)
+           -> Demo dataset in memory (always available fallback)
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Layer Responsibilities</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Main Files</th>
+              <th>Responsibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Presentation</td>
+              <td>src/app/*, src/components/*</td>
+              <td>Render dashboard and management views, trigger API calls, display state and feedback.</td>
+            </tr>
+            <tr>
+              <td>API</td>
+              <td>src/app/api/*/route.ts</td>
+              <td>Provide GET/POST/PUT endpoints for dashboard and entity operations.</td>
+            </tr>
+            <tr>
+              <td>Data Access</td>
+              <td>src/lib/oracle.ts</td>
+              <td>Encapsulate schema management, seed, reads, writes, and fallback routing.</td>
+            </tr>
+            <tr>
+              <td>Domain Model</td>
+              <td>src/lib/sample-data.ts</td>
+              <td>Define Company/Employee/StockPlan/Report types and baseline demo records.</td>
+            </tr>
+            <tr>
+              <td>Database Schema</td>
+              <td>db/schema.sql</td>
+              <td>Reference DDL for Oracle and initial seed merge statements.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>4. Data Model</h2>
+        <ul>
+          <li><b>companies</b>: issuer-level metadata (name, ticker, sector, headquarters)</li>
+          <li><b>employees</b>: people assigned to companies with role and salary</li>
+          <li><b>stock_plans</b>: plan settings (type, annual contribution, vesting, status)</li>
+          <li><b>financial_reports</b>: periodic portfolio/target/risk snapshots</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>5. Key Runtime Flows</h2>
+        <h3>Dashboard Read Flow</h3>
+        <ol>
+          <li>Client calls <code>GET /api/dashboard</code>.</li>
+          <li>API invokes <code>getDashboardData()</code>.</li>
+          <li>Data layer tries PostgreSQL, then Oracle, then demo fallback.</li>
+          <li>Response returns normalized payload with <code>source</code>, <code>summary</code>, and entity arrays.</li>
+        </ol>
+
+        <h3>Create/Update Flow</h3>
+        <ol>
+          <li>Form submits to entity route with POST (create) or PUT (update).</li>
+          <li>Route delegates to <code>saveCompany/saveEmployee/saveStockPlan</code>.</li>
+          <li>Data layer executes upsert transaction (PostgreSQL or Oracle).</li>
+          <li>On DB failure, operation is applied to in-memory demo state to keep UX functional.</li>
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>6. Non-functional Characteristics</h2>
+        <ul>
+          <li><b>Availability:</b> built-in fallback ensures UI remains operational even when DB is unavailable.</li>
+          <li><b>Consistency:</b> per-request write transactions in DB-backed mode with commit/rollback behavior.</li>
+          <li><b>Performance:</b> lightweight payloads and server-side no-store API responses for near-real-time updates.</li>
+          <li><b>Scalability:</b> PostgreSQL connection pooling via <code>pg.Pool</code>.</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>7. Deployment Inputs</h2>
+        <ul>
+          <li>Node.js runtime for Next.js application.</li>
+          <li>Optional PostgreSQL env vars: <code>POSTGRES_HOST</code>, <code>POSTGRES_PORT</code>, <code>POSTGRES_DB</code>, <code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code></li>
+          <li>Optional Oracle env vars: <code>ORACLE_USER</code>, <code>ORACLE_PASSWORD</code>, <code>ORACLE_CONNECTION_STRING</code></li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

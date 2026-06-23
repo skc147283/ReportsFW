@@ -1,0 +1,82 @@
+name: ETL & UI Seed Tests (Daily)
+
+on:
+  schedule:
+    # Morning cycle — 7 AM UTC
+    - cron: "0 7 * * *"
+    # Night cycle — 7 PM UTC
+    - cron: "0 19 * * *"
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "ETL mode"
+        required: false
+        default: "incremental"
+        type: choice
+        options: [incremental, full]
+
+jobs:
+  seed-and-etl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      BASE_URL: http://localhost:3000
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install Python dependencies
+        run: pip install requests pytest
+
+      - name: Build Next.js app
+        run: npm run build
+
+      - name: Start Next.js server (demo/fallback mode)
+        run: |
+          npm start &
+          echo "Waiting for server..."
+          sleep 10
+          curl -sf http://localhost:3000/api/dashboard || (echo "Server not ready" && exit 1)
+
+      - name: Run UI seed tests (morning / night)
+        run: |
+          python3 -m pytest tests/ui/seed_data.py -v --tb=short \
+            --junitxml=reports/seed-test-results.xml
+
+      - name: Run ETL pipeline
+        run: |
+          python3 -m etl.int_uat_reconcile --mode ${{ github.event.inputs.mode || 'incremental' }} \
+            | tee logs/etl-$(date +%H).log
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ github.run_id }}
+          path: |
+            reports/
+            logs/
+
+      - name: Upload ETL extracts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: etl-extracts-${{ github.run_id }}
+          path: tests/reconciliation/data/

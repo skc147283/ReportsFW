@@ -1,0 +1,35 @@
+{
+  "name": "reportsfw-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "etl:int-uat": "python3 -m etl.int_uat_reconcile --mode incremental",
+    "test:seed": "python3 -m pytest tests/ui/seed_data.py -v --tb=short",
+    "test:seed:morning": "python3 -m pytest tests/ui/seed_data.py -v --tb=short -k 'not ETLAfterSeed'",
+    "test:seed:night": "python3 -m pytest tests/ui/seed_data.py -v --tb=short"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "oracledb": "^6.8.0",
+    "pg": "^8.21.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "^22.15.3",
+    "@types/pg": "^8.20.0",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^9.25.0",
+    "eslint-config-next": "16.2.6",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3"
+  }
+}

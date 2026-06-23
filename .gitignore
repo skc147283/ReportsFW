@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Next.js build output
+.next/
+out/
+
+# Environment — keep example, ignore actual secrets
+.env.local
+.env*.local
+!.env.example
+
+# Databases (runtime artifacts)
+db/*.sqlite
+db/*.sqlite-shm
+db/*.sqlite-wal
+
+# ETL logs and extracts (runtime, not source)
+logs/
+tests/reconciliation/data/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+
+# Playwright
+.playwright-mcp/
+test-results/
+
+# Screenshots
+*.png
+
+# Python package builds
+*.egg-info/
+dist/
+build/
+
+# Misc
+reports/
+npm-debug.log*

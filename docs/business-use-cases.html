@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ReportsFW Business Use Cases</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 2rem;
+        background: #0f1724;
+        color: #eaf1fb;
+        font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      }
+      .container { max-width: 1120px; margin: 0 auto; }
+      .card {
+        background: #162236;
+        border: 1px solid #2b3f5f;
+        border-radius: 14px;
+        padding: 1.1rem 1.25rem;
+        margin-bottom: 1rem;
+      }
+      h1, h2 { margin-top: 0; }
+      code {
+        color: #6fd4ff;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 0.65rem; border-bottom: 1px solid #2a4063; vertical-align: top; }
+      th { color: #8eb9ff; }
+      .pill {
+        display: inline-block;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid #45618d;
+        color: #bed4f7;
+        margin-right: 0.4rem;
+        margin-bottom: 0.3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ReportsFW Business Use Cases</h1>
+      <p>
+        This document captures business use cases covered by the E2E framework, including primary actors,
+        expected outcomes, and traceability to automated tests.
+      </p>
+
+      <section class="card">
+        <h2>1. Primary Actors</h2>
+        <div class="pill">Finance Operations Manager</div>
+        <div class="pill">Equity Plan Administrator</div>
+        <div class="pill">HR Compensation Analyst</div>
+        <div class="pill">Executive Stakeholder</div>
+      </section>
+
+      <section class="card">
+        <h2>2. Core Business Use Cases</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Use Case</th>
+              <th>Goal</th>
+              <th>Main Steps</th>
+              <th>Success Criteria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>UC-01</td>
+              <td>Review Portfolio Dashboard</td>
+              <td>View latest portfolio and risk overview.</td>
+              <td>Open dashboard, refresh data, view chart and summary sections.</td>
+              <td>Key dashboard sections are visible and data loads without crash.</td>
+            </tr>
+            <tr>
+              <td>UC-02</td>
+              <td>Create Company Profile</td>
+              <td>Add a new legal entity for reporting and plan assignment.</td>
+              <td>Navigate to companies page, enter company details, submit form.</td>
+              <td>Company appears in list and can be selected for downstream entities.</td>
+            </tr>
+            <tr>
+              <td>UC-03</td>
+              <td>Register Employee</td>
+              <td>Associate an employee with a company and compensation profile.</td>
+              <td>Open employees page, select company, submit employee details.</td>
+              <td>Employee appears in directory with correct identity fields.</td>
+            </tr>
+            <tr>
+              <td>UC-04</td>
+              <td>Create Stock Plan</td>
+              <td>Define plan structure and contribution settings for a company.</td>
+              <td>Open stock plans page, select company, enter plan data, submit.</td>
+              <td>Plan is persisted and displayed in plan catalog and dashboard context.</td>
+            </tr>
+            <tr>
+              <td>UC-05</td>
+              <td>Validate End-to-End Traceability</td>
+              <td>Confirm newly created records surface on the dashboard.</td>
+              <td>Execute UC-02, UC-03, UC-04 then revisit dashboard.</td>
+              <td>New company and plan names are visible on dashboard-driven views.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>3. Test Traceability Matrix</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Use Case</th>
+              <th>Automated Test</th>
+              <th>Coverage Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>UC-01</td>
+              <td><code>test_dashboard_renders_key_sections</code></td>
+              <td>Validates dashboard render, refresh action, and critical section visibility.</td>
+            </tr>
+            <tr>
+              <td>UC-02, UC-03, UC-04, UC-05</td>
+              <td><code>test_end_to_end_business_flow</code></td>
+              <td>Exercises create flows for company, employee, stock plan, then verifies dashboard propagation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>4. Out of Scope (Current)</h2>
+        <ul>
+          <li>Negative-path validation (invalid salary/date/email edge cases)</li>
+          <li>Role-based authorization scenarios</li>
+          <li>Cross-browser matrix beyond Chrome</li>
+          <li>Performance and load testing</li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

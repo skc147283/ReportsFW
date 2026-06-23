@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #07111f;
+  --background-soft: #0b1728;
+  --surface: rgba(13, 22, 39, 0.82);
+  --surface-strong: rgba(16, 28, 48, 0.96);
+  --text: #eef4fb;
+  --muted: #9bb0cc;
+  --border: rgba(158, 176, 202, 0.18);
+  --accent: #4dd6a8;
+  --accent-strong: #62a6ff;
+  --accent-warm: #f2a96b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(77, 214, 168, 0.15), transparent 26%),
+    radial-gradient(circle at top right, rgba(98, 166, 255, 0.16), transparent 24%),
+    linear-gradient(180deg, #0a1322 0%, #07111f 48%, #050d19 100%);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(77, 214, 168, 0.08), transparent 0 28%),
+    radial-gradient(circle at 80% 0%, rgba(242, 169, 107, 0.1), transparent 0 26%),
+    linear-gradient(180deg, rgba(8, 15, 27, 0.98), rgba(5, 10, 18, 1));
+}
+
+::selection {
+  background: rgba(77, 214, 168, 0.25);
+  color: var(--text);
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(7, 17, 31, 0.72);
+  color: var(--text);
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: rgba(77, 214, 168, 0.45);
+  background: rgba(7, 17, 31, 0.88);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(155, 176, 204, 0.75);
+}
